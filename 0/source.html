@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Notification Center</title>
+    <title>Notification System</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -15,127 +15,6 @@
         text-align: center;
         margin-bottom: 30px;
       }
-
-      .notification-center {
-        max-width: 600px;
-        margin: 0 auto;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-      }
-
-      .notification-header {
-        padding: 15px 20px;
-        background-color: #f7f7f7;
-        border-bottom: 1px solid #e1e1e1;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .notification-header h2 {
-        margin: 0;
-        font-size: 18px;
-      }
-
-      .notification-list {
-        max-height: 400px;
-        overflow-y: auto;
-      }
-
-      .notification {
-        padding: 15px 20px;
-        border-bottom: 1px solid #eee;
-        display: flex;
-        align-items: flex-start;
-        cursor: pointer;
-        transition: background-color 0.2s;
-      }
-
-      .notification:hover {
-        background-color: #f9f9f9;
-      }
-
-      .notification-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 15px;
-        flex-shrink: 0;
-        color: white;
-        font-weight: bold;
-      }
-
-      .notification-content {
-        flex-grow: 1;
-      }
-
-      .notification-title {
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #333;
-      }
-
-      .notification-message {
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 5px;
-      }
-
-      .notification-time {
-        color: #999;
-        font-size: 12px;
-      }
-
-      .notification-new {
-        position: relative;
-      }
-
-      .notification-new:after {
-        content: '';
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: #2196F3;
-      }
-
-      .notification-actions {
-        padding: 15px 20px;
-        text-align: center;
-        border-top: 1px solid #eee;
-      }
-
-      .clear-all {
-        background: none;
-        border: none;
-        color: #2196F3;
-        cursor: pointer;
-        font-size: 14px;
-        padding: 5px 10px;
-      }
-
-      .success .notification-icon {
-        background-color: #4CAF50;
-      }
-
-      .warning .notification-icon {
-        background-color: #FF9800;
-      }
-
-      .error .notification-icon {
-        background-color: #F44336;
-      }
-
-      .info .notification-icon {
-        background-color: #2196F3;
-      }
       
       .toast-container {
         position: fixed;
@@ -145,20 +24,25 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+        gap: 10px;
       }
       
       .toast {
-        padding: 12px 20px;
+        padding: 16px 20px;
         margin-top: 10px;
-        border-radius: 4px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-        color: white;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         display: flex;
-        align-items: center;
-        min-width: 280px;
+        align-items: flex-start;
+        min-width: 320px;
         transform: translateX(120%);
         transition: transform 0.3s ease-out;
         opacity: 0;
+        background-color: white;
+        border-left: 5px solid #ccc;
+        height: 90px;
+        flex-direction: column;
+        justify-content: space-between;
       }
       
       .toast.show {
@@ -172,121 +56,135 @@
       }
       
       .toast.success {
-        background-color: #4CAF50;
+        border-left-color: #4CAF50;
       }
       
       .toast.warning {
-        background-color: #FF9800;
+        border-left-color: #FF9800;
       }
       
       .toast.error {
-        background-color: #F44336;
+        border-left-color: #F44336;
       }
       
       .toast.info {
-        background-color: #2196F3;
+        border-left-color: #2196F3;
+      }
+      
+      .toast.update {
+        border-left-color: #9C27B0;
+      }
+      
+      .toast.security {
+        border-left-color: #607D8B;
+      }
+      
+      .toast-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        width: 100%;
       }
       
       .toast-icon {
         margin-right: 10px;
         font-weight: bold;
-      }
-      
-      .new-notification-badge {
-        display: inline-block;
-        background-color: #F44336;
-        color: white;
-        border-radius: 50%;
         width: 24px;
         height: 24px;
-        text-align: center;
-        line-height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+      }
+      
+      .toast.success .toast-icon {
+        background-color: #4CAF50;
+      }
+      
+      .toast.warning .toast-icon {
+        background-color: #FF9800;
+      }
+      
+      .toast.error .toast-icon {
+        background-color: #F44336;
+      }
+      
+      .toast.info .toast-icon {
+        background-color: #2196F3;
+      }
+      
+      .toast.update .toast-icon {
+        background-color: #9C27B0;
+      }
+      
+      .toast.security .toast-icon {
+        background-color: #607D8B;
+      }
+      
+      .toast-title {
+        font-weight: bold;
+        color: #333;
+        flex-grow: 1;
+      }
+      
+      .toast-time {
+        color: #999;
+        font-size: 12px;
         margin-left: 10px;
+      }
+      
+      .toast-message {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      
+      .toast-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+      
+      .toast-button {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: background-color 0.2s;
+      }
+      
+      .toast-button.primary {
+        background-color: #2196F3;
+        color: white;
+      }
+      
+      .toast-button.secondary {
+        background-color: #f1f1f1;
+        color: #333;
+      }
+      
+      .toast-button:hover {
+        opacity: 0.9;
       }
     </style>
   </head>
   <body>
-    <h1>Notification Center <span class="new-notification-badge">3</span></h1>
-    
-    <div class="notification-center">
-      <div class="notification-header">
-        <h2>Notifications</h2>
-        <span>2025-03-15</span>
-      </div>
-      
-      <div class="notification-list">
-        <div class="notification notification-new success">
-          <div class="notification-icon">✓</div>
-          <div class="notification-content">
-            <div class="notification-title">Project approved</div>
-            <div class="notification-message">Your project submission was approved by the admin.</div>
-            <div class="notification-time">Just now</div>
-          </div>
-        </div>
-        
-        <div class="notification notification-new warning">
-          <div class="notification-icon">!</div>
-          <div class="notification-content">
-            <div class="notification-title">Storage space running low</div>
-            <div class="notification-message">You have less than 10% storage space remaining.</div>
-            <div class="notification-time">15 minutes ago</div>
-          </div>
-        </div>
-        
-        <div class="notification notification-new error">
-          <div class="notification-icon">✕</div>
-          <div class="notification-content">
-            <div class="notification-title">Payment failed</div>
-            <div class="notification-message">Your last payment couldn't be processed. Please update your payment method.</div>
-            <div class="notification-time">1 hour ago</div>
-          </div>
-        </div>
-        
-        <div class="notification info">
-          <div class="notification-icon">i</div>
-          <div class="notification-content">
-            <div class="notification-title">System update available</div>
-            <div class="notification-message">A new version (2.4.1) is available for download.</div>
-            <div class="notification-time">Yesterday</div>
-          </div>
-        </div>
-        
-        <div class="notification info">
-          <div class="notification-icon">i</div>
-          <div class="notification-content">
-            <div class="notification-title">New feature added</div>
-            <div class="notification-message">Check out our latest feature improvements in the dashboard.</div>
-            <div class="notification-time">Yesterday</div>
-          </div>
-        </div>
-        
-        <div class="notification success">
-          <div class="notification-icon">✓</div>
-          <div class="notification-content">
-            <div class="notification-title">Account verified</div>
-            <div class="notification-message">Your account has been successfully verified.</div>
-            <div class="notification-time">2 days ago</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="notification-actions">
-        <button class="clear-all" id="clear-all-btn">Clear all notifications</button>
-      </div>
-    </div>
+    <h1>Application Dashboard</h1>
     
     <div class="toast-container" id="toast-container"></div>
     
     <script>
       // Current date and time display
-      const currentDate = "2025-03-15 16:38:28";
-      document.querySelector('.notification-header span').textContent = currentDate.split(' ')[0];
+      const currentDate = "2025-03-15 20:31:20";
       
       // User login
       const userLogin = "opuadm";
       
       // Toast notification system
-      function showToast(type, message) {
+      function showToast(type, title, message, primaryAction, secondaryAction) {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
@@ -297,11 +195,27 @@
           case 'warning': icon = '!'; break;
           case 'error': icon = '✕'; break;
           case 'info': icon = 'i'; break;
+          case 'update': icon = '↑'; break;
+          case 'security': icon = '🔒'; break;
         }
         
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const timeString = `${hours}:${minutes}:${seconds}`;
+        
         toast.innerHTML = `
-          <span class="toast-icon">${icon}</span>
-          <span>${message}</span>
+          <div class="toast-header">
+            <div class="toast-icon">${icon}</div>
+            <div class="toast-title">${title}</div>
+            <div class="toast-time">${timeString}</div>
+          </div>
+          <div class="toast-message">${message}</div>
+          <div class="toast-actions">
+            <button class="toast-button secondary">${secondaryAction}</button>
+            <button class="toast-button primary">${primaryAction}</button>
+          </div>
         `;
         
         container.appendChild(toast);
@@ -312,12 +226,31 @@
         // Show toast
         toast.classList.add('show');
         
+        // Add click event listeners to buttons
+        const primaryButton = toast.querySelector('.toast-button.primary');
+        const secondaryButton = toast.querySelector('.toast-button.secondary');
+        
+        primaryButton.addEventListener('click', function() {
+          toast.classList.add('hide');
+          setTimeout(() => {
+            if (toast.parentNode === container) {
+              container.removeChild(toast);
+            }
+          }, 300);
+        });
+        
+        secondaryButton.addEventListener('click', function() {
+          toast.classList.add('hide');
+          setTimeout(() => {
+            if (toast.parentNode === container) {
+              container.removeChild(toast);
+            }
+          }, 300);
+        });
+        
         // Hide toast after 5 seconds
         setTimeout(() => {
           toast.classList.add('hide');
-          toast.classList.remove('show');
-          
-          // Remove toast element after fade out
           setTimeout(() => {
             if (toast.parentNode === container) {
               container.removeChild(toast);
@@ -326,63 +259,161 @@
         }, 5000);
       }
       
-      // Add click events to notifications
-      document.querySelectorAll('.notification').forEach(notification => {
-        notification.addEventListener('click', function() {
-          const title = this.querySelector('.notification-title').textContent;
-          const isNew = this.classList.contains('notification-new');
-          
-          if (isNew) {
-            this.classList.remove('notification-new');
-            
-            // Update notification count
-            const badge = document.querySelector('.new-notification-badge');
-            const currentCount = parseInt(badge.textContent);
-            if (currentCount > 1) {
-              badge.textContent = currentCount - 1;
-            } else {
-              badge.style.display = 'none';
-            }
-          }
-          
-          showToast('info', `Notification opened: "${title}"`);
-        });
-      });
-      
-      // Clear all notifications
-      document.getElementById('clear-all-btn').addEventListener('click', function() {
-        document.querySelectorAll('.notification-new').forEach(notification => {
-          notification.classList.remove('notification-new');
-        });
-        
-        // Hide notification badge
-        const badge = document.querySelector('.new-notification-badge');
-        badge.style.display = 'none';
-        
-        showToast('success', 'All notifications cleared');
-      });
-      
       // Notification messages
       const notificationMessages = [
-        { type: 'info', message: `New message from ${userLogin}` },
-        { type: 'success', message: 'Document successfully uploaded' },
-        { type: 'warning', message: 'Your subscription will expire soon' },
-        { type: 'error', message: 'Failed to connect to server' },
-        { type: 'info', message: 'Someone mentioned you in a comment' },
-        { type: 'success', message: 'Task completed successfully' },
-        { type: 'warning', message: 'Battery is running low' },
-        { type: 'info', message: 'New update available' },
-        { type: 'error', message: 'Network connection lost' },
-        { type: 'success', message: 'File saved to cloud' },
-        { type: 'warning', message: 'Unusual login attempt detected' },
-        { type: 'info', message: 'Meeting starts in 15 minutes' }
+        { 
+          type: 'info', 
+          title: 'New Message', 
+          message: `${userLogin} mentioned you in a comment.`,
+          primaryAction: 'View',
+          secondaryAction: 'Dismiss'
+        },
+        { 
+          type: 'success', 
+          title: 'Upload Complete', 
+          message: 'Your document has been successfully uploaded to the cloud storage.',
+          primaryAction: 'Open',
+          secondaryAction: 'Close'
+        },
+        { 
+          type: 'warning', 
+          title: 'Subscription Expiring', 
+          message: 'Your premium subscription will expire in 3 days. Renew now to avoid service interruption.',
+          primaryAction: 'Renew',
+          secondaryAction: 'Later'
+        },
+        { 
+          type: 'error', 
+          title: 'Connection Failed', 
+          message: 'Unable to connect to the server. Please check your network connection and try again.',
+          primaryAction: 'Retry',
+          secondaryAction: 'Settings'
+        },
+        { 
+          type: 'info', 
+          title: 'New Comment', 
+          message: `${userLogin} left a comment on your project "Annual Report 2025".`,
+          primaryAction: 'Read',
+          secondaryAction: 'Ignore'
+        },
+        { 
+          type: 'success', 
+          title: 'Task Completed', 
+          message: 'The automated backup process has completed successfully.',
+          primaryAction: 'Details',
+          secondaryAction: 'Dismiss'
+        },
+        { 
+          type: 'warning', 
+          title: 'Battery Low', 
+          message: 'Your device battery is at 15%. Please connect to a power source soon.',
+          primaryAction: 'Power Settings',
+          secondaryAction: 'Ignore'
+        },
+        { 
+          type: 'update', 
+          title: 'Update Available', 
+          message: 'Version 3.2.1 is now available with important security fixes and performance improvements.',
+          primaryAction: 'Install Now',
+          secondaryAction: 'Later'
+        },
+        { 
+          type: 'error', 
+          title: 'Sync Failed', 
+          message: 'Unable to sync your recent changes with the cloud. Some changes may be lost.',
+          primaryAction: 'Try Again',
+          secondaryAction: 'Help'
+        },
+        { 
+          type: 'success', 
+          title: 'Payment Received', 
+          message: 'Your account has been credited with $245.00 from Customer #38291.',
+          primaryAction: 'View Details',
+          secondaryAction: 'Close'
+        },
+        { 
+          type: 'warning', 
+          title: 'Storage Space Low', 
+          message: 'You have less than 10% storage space remaining. Consider cleaning up old files.',
+          primaryAction: 'Manage Storage',
+          secondaryAction: 'Ignore'
+        },
+        { 
+          type: 'info', 
+          title: 'Calendar Reminder', 
+          message: 'You have a meeting with the Development Team in 15 minutes.',
+          primaryAction: 'Join Now',
+          secondaryAction: 'Snooze'
+        },
+        { 
+          type: 'security', 
+          title: 'Login Attempt', 
+          message: 'Unusual login attempt detected from IP 203.45.78.192 in Prague, Czech Republic.',
+          primaryAction: 'Secure Account',
+          secondaryAction: 'Ignore'
+        },
+        { 
+          type: 'update', 
+          title: 'Feature Update', 
+          message: 'New dashboard analytics features have been added to your account.',
+          primaryAction: 'Explore',
+          secondaryAction: 'Later'
+        },
+        { 
+          type: 'error', 
+          title: 'Database Error', 
+          message: 'Failed to connect to database server. Error code: DB-5501.',
+          primaryAction: 'Troubleshoot',
+          secondaryAction: 'Report'
+        },
+        { 
+          type: 'success', 
+          title: 'Report Generated', 
+          message: 'Your monthly financial report has been successfully generated.',
+          primaryAction: 'Download',
+          secondaryAction: 'View Online'
+        },
+        { 
+          type: 'warning', 
+          title: 'Certificate Expiring', 
+          message: 'Your SSL certificate will expire in 7 days. Renewal is required.',
+          primaryAction: 'Renew Now',
+          secondaryAction: 'Details'
+        },
+        { 
+          type: 'security', 
+          title: 'Password Changed', 
+          message: `The password for ${userLogin} was changed successfully on ${currentDate}.`,
+          primaryAction: 'Verify',
+          secondaryAction: 'OK'
+        },
+        { 
+          type: 'info', 
+          title: 'New Follower', 
+          message: 'User TechGuru42 has started following your repository.',
+          primaryAction: 'View Profile',
+          secondaryAction: 'Dismiss'
+        },
+        { 
+          type: 'update', 
+          title: 'System Maintenance', 
+          message: 'Scheduled maintenance on March 18, 2025 from 02:00 to 04:00 UTC.',
+          primaryAction: 'Calendar',
+          secondaryAction: 'Dismiss'
+        }
       ];
       
       // Show notifications every 2.5 seconds
       function showRandomNotification() {
         const randomIndex = Math.floor(Math.random() * notificationMessages.length);
         const notification = notificationMessages[randomIndex];
-        showToast(notification.type, notification.message);
+        showToast(
+          notification.type, 
+          notification.title, 
+          notification.message, 
+          notification.primaryAction, 
+          notification.secondaryAction
+        );
         
         // Schedule next notification
         setTimeout(showRandomNotification, 2500);
