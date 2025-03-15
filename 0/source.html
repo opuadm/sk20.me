@@ -139,14 +139,17 @@
       
       .toast-container {
         position: fixed;
-        top: 20px;
+        bottom: 20px;
         right: 20px;
         z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
       }
       
       .toast {
         padding: 12px 20px;
-        margin-bottom: 10px;
+        margin-top: 10px;
         border-radius: 4px;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
         color: white;
@@ -155,10 +158,17 @@
         min-width: 280px;
         transform: translateX(120%);
         transition: transform 0.3s ease-out;
+        opacity: 0;
       }
       
       .toast.show {
         transform: translateX(0);
+        opacity: 1;
+      }
+      
+      .toast.hide {
+        opacity: 0;
+        transition: opacity 0.3s ease-out;
       }
       
       .toast.success {
@@ -201,7 +211,7 @@
     <div class="notification-center">
       <div class="notification-header">
         <h2>Notifications</h2>
-        <span>Today</span>
+        <span>2025-03-15</span>
       </div>
       
       <div class="notification-list">
@@ -268,6 +278,13 @@
     <div class="toast-container" id="toast-container"></div>
     
     <script>
+      // Current date and time display
+      const currentDate = "2025-03-15 16:38:28";
+      document.querySelector('.notification-header span').textContent = currentDate.split(' ')[0];
+      
+      // User login
+      const userLogin = "opuadm";
+      
       // Toast notification system
       function showToast(type, message) {
         const container = document.getElementById('toast-container');
@@ -295,14 +312,16 @@
         // Show toast
         toast.classList.add('show');
         
-        // Auto remove after 5 seconds
+        // Hide toast after 5 seconds
         setTimeout(() => {
-          toast.style.transition = 'opacity 0.3s, transform 0.3s';
-          toast.style.opacity = '0';
-          toast.style.transform = 'translateX(120%)';
+          toast.classList.add('hide');
+          toast.classList.remove('show');
           
+          // Remove toast element after fade out
           setTimeout(() => {
-            container.removeChild(toast);
+            if (toast.parentNode === container) {
+              container.removeChild(toast);
+            }
           }, 300);
         }, 5000);
       }
@@ -343,20 +362,34 @@
         showToast('success', 'All notifications cleared');
       });
       
-      // Show random notifications periodically
+      // Notification messages
       const notificationMessages = [
-        { type: 'info', message: 'New comment on your post' },
+        { type: 'info', message: `New message from ${userLogin}` },
         { type: 'success', message: 'Document successfully uploaded' },
         { type: 'warning', message: 'Your subscription will expire soon' },
         { type: 'error', message: 'Failed to connect to server' },
-        { type: 'info', message: 'Someone mentioned you in a comment' }
+        { type: 'info', message: 'Someone mentioned you in a comment' },
+        { type: 'success', message: 'Task completed successfully' },
+        { type: 'warning', message: 'Battery is running low' },
+        { type: 'info', message: 'New update available' },
+        { type: 'error', message: 'Network connection lost' },
+        { type: 'success', message: 'File saved to cloud' },
+        { type: 'warning', message: 'Unusual login attempt detected' },
+        { type: 'info', message: 'Meeting starts in 15 minutes' }
       ];
       
-      setTimeout(() => {
-        // Show a random notification after a delay
-        const randomNotification = notificationMessages[Math.floor(Math.random() * notificationMessages.length)];
-        showToast(randomNotification.type, randomNotification.message);
-      }, 10000);
+      // Show notifications every 2.5 seconds
+      function showRandomNotification() {
+        const randomIndex = Math.floor(Math.random() * notificationMessages.length);
+        const notification = notificationMessages[randomIndex];
+        showToast(notification.type, notification.message);
+        
+        // Schedule next notification
+        setTimeout(showRandomNotification, 2500);
+      }
+      
+      // Start showing notifications
+      setTimeout(showRandomNotification, 1000);
     </script>
   </body>
 </html>
