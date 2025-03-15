@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Notification Center</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .notification-center {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .notification-header {
+        padding: 15px 20px;
+        background-color: #f7f7f7;
+        border-bottom: 1px solid #e1e1e1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .notification-header h2 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .notification-list {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .notification {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: flex-start;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .notification:hover {
+        background-color: #f9f9f9;
+      }
+
+      .notification-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        flex-shrink: 0;
+        color: white;
+        font-weight: bold;
+      }
+
+      .notification-content {
+        flex-grow: 1;
+      }
+
+      .notification-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #333;
+      }
+
+      .notification-message {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .notification-time {
+        color: #999;
+        font-size: 12px;
+      }
+
+      .notification-new {
+        position: relative;
+      }
+
+      .notification-new:after {
+        content: '';
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #2196F3;
+      }
+
+      .notification-actions {
+        padding: 15px 20px;
+        text-align: center;
+        border-top: 1px solid #eee;
+      }
+
+      .clear-all {
+        background: none;
+        border: none;
+        color: #2196F3;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 5px 10px;
+      }
+
+      .success .notification-icon {
+        background-color: #4CAF50;
+      }
+
+      .warning .notification-icon {
+        background-color: #FF9800;
+      }
+
+      .error .notification-icon {
+        background-color: #F44336;
+      }
+
+      .info .notification-icon {
+        background-color: #2196F3;
+      }
+      
+      .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+      
+      .toast {
+        padding: 12px 20px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        color: white;
+        display: flex;
+        align-items: center;
+        min-width: 280px;
+        transform: translateX(120%);
+        transition: transform 0.3s ease-out;
+      }
+      
+      .toast.show {
+        transform: translateX(0);
+      }
+      
+      .toast.success {
+        background-color: #4CAF50;
+      }
+      
+      .toast.warning {
+        background-color: #FF9800;
+      }
+      
+      .toast.error {
+        background-color: #F44336;
+      }
+      
+      .toast.info {
+        background-color: #2196F3;
+      }
+      
+      .toast-icon {
+        margin-right: 10px;
+        font-weight: bold;
+      }
+      
+      .new-notification-badge {
+        display: inline-block;
+        background-color: #F44336;
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        line-height: 24px;
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Notification Center <span class="new-notification-badge">3</span></h1>
+    
+    <div class="notification-center">
+      <div class="notification-header">
+        <h2>Notifications</h2>
+        <span>Today</span>
+      </div>
+      
+      <div class="notification-list">
+        <div class="notification notification-new success">
+          <div class="notification-icon">✓</div>
+          <div class="notification-content">
+            <div class="notification-title">Project approved</div>
+            <div class="notification-message">Your project submission was approved by the admin.</div>
+            <div class="notification-time">Just now</div>
+          </div>
+        </div>
+        
+        <div class="notification notification-new warning">
+          <div class="notification-icon">!</div>
+          <div class="notification-content">
+            <div class="notification-title">Storage space running low</div>
+            <div class="notification-message">You have less than 10% storage space remaining.</div>
+            <div class="notification-time">15 minutes ago</div>
+          </div>
+        </div>
+        
+        <div class="notification notification-new error">
+          <div class="notification-icon">✕</div>
+          <div class="notification-content">
+            <div class="notification-title">Payment failed</div>
+            <div class="notification-message">Your last payment couldn't be processed. Please update your payment method.</div>
+            <div class="notification-time">1 hour ago</div>
+          </div>
+        </div>
+        
+        <div class="notification info">
+          <div class="notification-icon">i</div>
+          <div class="notification-content">
+            <div class="notification-title">System update available</div>
+            <div class="notification-message">A new version (2.4.1) is available for download.</div>
+            <div class="notification-time">Yesterday</div>
+          </div>
+        </div>
+        
+        <div class="notification info">
+          <div class="notification-icon">i</div>
+          <div class="notification-content">
+            <div class="notification-title">New feature added</div>
+            <div class="notification-message">Check out our latest feature improvements in the dashboard.</div>
+            <div class="notification-time">Yesterday</div>
+          </div>
+        </div>
+        
+        <div class="notification success">
+          <div class="notification-icon">✓</div>
+          <div class="notification-content">
+            <div class="notification-title">Account verified</div>
+            <div class="notification-message">Your account has been successfully verified.</div>
+            <div class="notification-time">2 days ago</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="notification-actions">
+        <button class="clear-all" id="clear-all-btn">Clear all notifications</button>
+      </div>
+    </div>
+    
+    <div class="toast-container" id="toast-container"></div>
+    
+    <script>
+      // Toast notification system
+      function showToast(type, message) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        let icon = '';
+        switch(type) {
+          case 'success': icon = '✓'; break;
+          case 'warning': icon = '!'; break;
+          case 'error': icon = '✕'; break;
+          case 'info': icon = 'i'; break;
+        }
+        
+        toast.innerHTML = `
+          <span class="toast-icon">${icon}</span>
+          <span>${message}</span>
+        `;
+        
+        container.appendChild(toast);
+        
+        // Force reflow to enable transition
+        toast.offsetHeight;
+        
+        // Show toast
+        toast.classList.add('show');
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+          toast.style.transition = 'opacity 0.3s, transform 0.3s';
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateX(120%)';
+          
+          setTimeout(() => {
+            container.removeChild(toast);
+          }, 300);
+        }, 5000);
+      }
+      
+      // Add click events to notifications
+      document.querySelectorAll('.notification').forEach(notification => {
+        notification.addEventListener('click', function() {
+          const title = this.querySelector('.notification-title').textContent;
+          const isNew = this.classList.contains('notification-new');
+          
+          if (isNew) {
+            this.classList.remove('notification-new');
+            
+            // Update notification count
+            const badge = document.querySelector('.new-notification-badge');
+            const currentCount = parseInt(badge.textContent);
+            if (currentCount > 1) {
+              badge.textContent = currentCount - 1;
+            } else {
+              badge.style.display = 'none';
+            }
+          }
+          
+          showToast('info', `Notification opened: "${title}"`);
+        });
+      });
+      
+      // Clear all notifications
+      document.getElementById('clear-all-btn').addEventListener('click', function() {
+        document.querySelectorAll('.notification-new').forEach(notification => {
+          notification.classList.remove('notification-new');
+        });
+        
+        // Hide notification badge
+        const badge = document.querySelector('.new-notification-badge');
+        badge.style.display = 'none';
+        
+        showToast('success', 'All notifications cleared');
+      });
+      
+      // Show random notifications periodically
+      const notificationMessages = [
+        { type: 'info', message: 'New comment on your post' },
+        { type: 'success', message: 'Document successfully uploaded' },
+        { type: 'warning', message: 'Your subscription will expire soon' },
+        { type: 'error', message: 'Failed to connect to server' },
+        { type: 'info', message: 'Someone mentioned you in a comment' }
+      ];
+      
+      setTimeout(() => {
+        // Show a random notification after a delay
+        const randomNotification = notificationMessages[Math.floor(Math.random() * notificationMessages.length)];
+        showToast(randomNotification.type, randomNotification.message);
+      }, 10000);
+    </script>
+  </body>
+</html>
