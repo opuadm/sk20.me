@@ -6,14 +6,14 @@
   <body>
     <h1>Please wait :)</h1>
     <script>
-      const randomURLs = {
+      let randomURLs = {
         "https://opuadm.com",
         "https://tiagorangel.com"
       };
 
-      const randomURLfromConst = Math.floor(math.random() * randomURLs.length);
+      let randomURLfromArray = Math.floor(math.random() * randomURLs.length);
       
-      window.location.href = randomURLs[randomURLfromConst];
+      console.log(randomURLfromArray);
     </script>
   </body>
 </html>
